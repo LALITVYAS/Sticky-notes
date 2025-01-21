@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes App</title>
+  <style src="index.css"></style>
+</head>
+<body>
+  <!-- Left Section -->
+  <div class="container left">
+    <textarea 
+      id="noteInput" 
+      class="textarea" 
+      placeholder="// Write a note here"></textarea>
+    <button id="addNoteButton" class="button">Add note</button>
+  </div>
+
+  <!-- Right Section -->
+  <div id="notesContainer" class="container right">
+    <h1 class="notes-title">Your Notes</h1>
+    <p id="noNotesMessage" class="no-notes">You have not added a note yet.</p>
+  </div>
+
+  <script>
+    // Grab elements
+    const noteInput = document.getElementById("noteInput");
+    const addNoteButton = document.getElementById("addNoteButton");
+    const notesContainer = document.getElementById("notesContainer");
+    const noNotesMessage = document.getElementById("noNotesMessage");
+
+    // Add click event listener to the button
+    addNoteButton.addEventListener("click", () => {
+      const noteText = noteInput.value.trim();
+
+      if (noteText === "") {
+        alert("Please write something before adding a note.");
+        return;
+      }
+
+      // Hide "no notes" message if it exists
+      if (noNotesMessage) {
+        noNotesMessage.style.display = "none";
+      }
+
+      // Create a new note element
+      const note = document.createElement("div");
+      note.className = "w-full p-4 mb-4 bg-gray-100 border-2 border-gray-300 rounded-md shadow-sm flex justify-between items-center";
+      note.innerHTML = `
+        <span class="text-gray-800">${noteText}</span>
+        <button class="text-red-500 hover:text-red-700 font-bold">Delete</button>
+      `;
+
+      // Add delete functionality to the note
+      note.querySelector("button").addEventListener("click", () => {
+        note.remove();
+
+        // Show "no notes" message if no notes are left
+        if (notesContainer.children.length === 1) {
+          noNotesMessage.style.display = "block";
+        }
+      });
+
+      // Append the note to the container
+      notesContainer.appendChild(note);
+
+      // Clear the input
+      noteInput.value = "";
+    });
+  </script>
+</body>
+</html>
